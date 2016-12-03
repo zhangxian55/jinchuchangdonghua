@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>H5动画</title>
+    <style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    html {
+        height: 100%;
+    }
+    
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .inner_c {
+        width: 1000px;
+        height: 100%;
+        margin: 0 auto;
+        perspective: 300px;
+        position: relative;
+        min-height: 400px;
+    }
+    
+    h1 {
+        width: 577px;
+        height: 101px;
+        position: absolute;
+        left: 50%;
+        margin-left: -288.5px;
+        top: 30%;
+        perspective: 300px;
+    }
+    
+    h1 div {
+        background: url(http://i1.sinaimg.cn/travel/2014/1225/U10125P704DT20141225154320.jpg);
+        text-indent: -999em;
+        width: 577px;
+        height: 400px;
+        display: none;
+        -webkit-background-size: 100% 100%;
+        background-size: 100% 100%;
+    }
+    
+    .logo {
+        position: absolute;
+        top: 10%;
+        left: 10px;
+        perspective: 300px;
+    }
+    
+    .logo img {
+        display: none;
+    }
+    
+    .pic1 {
+        width: 381px;
+        height: 381px;
+        perspective: 300px;
+        position: absolute;
+        top: 100px;
+        left: 0px;
+    }
+    
+    .pic1 img {
+        position: absolute;
+    }
+    
+    .unit {
+        width: 381px;
+        height: 381px;
+        perspective: 300px;
+        transform-style: preserve-3d;
+        display: none;
+    }
+    
+    @-webkit-keyframes z {
+        from {
+            transform: rotate(-240deg) translateZ(80px);
+        }
+        to {
+            transform: rotate(10deg) translateZ(80px);
+        }
+    }
+    
+    .pic2 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 316px;
+        height: 296px;
+        margin-left: -155px;
+        margin-top: -148px;
+        perspective: 300px;
+    }
+    
+    .pic2 img {
+        display: none;
+    }
+    
+    nav {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        width: 20px;
+        height: 100px;
+        margin-top: -50px;
+    }
+    
+    nav span {
+        display: block;
+        width: 20px;
+        height: 20px;
+        margin-bottom: 10px;
+        background-color: skyblue;
+        border-radius: 50%;
+    }
+    
+    nav span.cur {
+        background-color: red;
+    }
+    
+    .page2-pic {
+        position: absolute;
+        left: 50px;
+        top: 50px;
+        height: 600px;
+        width: 1000px;
+        perspective: 300px;
+    }
+    
+    .page2-pic img {
+        height: 100%;
+        width: 100%;
+        display: none;
+    }
+    
+    .page3-pic {
+        position: absolute;
+        left: 50px;
+        top: 50px;
+        height: 600px;
+        width: 1000px;
+        perspective: 300px;
+    }
+    
+    .page3-pic img {
+        height: 100%;
+        width: 100%;
+        display: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="inner_c">
+        <h1><div>北国第一洞</div></h1>
+        <div class="logo"><img src="http://www.xian55.com/images/11.jpg" alt=""></div>
+        <div class="pic1">
+            <div class="unit"><img src="http://imgsrc.baidu.com/forum/w=580/sign=909c259dd73f8794d3ff4826e21a0ead/98b3a1014c086e061f4cf96e01087bf40bd1cbdd.jpg" alt=""></div>
+        </div>
+        <div class="pic2"><img src="http://y0.ifengimg.com/a/2016_04/8d5bd84c6038aee.jpg" alt=""></div>
+        <div class="page2">
+            <div class="page2-pic"> <img src="http://pic.lvmama.com/uploads/pc/place2/2016-05-13/08a41f2f-7b17-42d5-a376-e4b5250460b8.jpg"></div>
+        </div>
+        <div class="page3">
+            <div class="page3-pic"> <img src="http://p14.qhimg.com/t01c8263297621491be.png"></div>
+        </div>
+    </div>
+    <nav><span class="cur"></span><span></span><span></span><span></span></nav>
+    <script type="text/javascript" src="http://www.xian55.com/js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="http://www.xian55.com/js/velocity.min.js"></script>
+    <script type="text/javascript" src="http://www.xian55.com/js/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript">
+    // 当前信号量
+    var page = 0;
+    var lock = true;
+    // 监听滚轮事件
+    $(document).mousewheel(function(event, delta) {
+        if (!lock) return;
+        // 备份老信号量
+        var old = page;
+        // 鼠标滚轮下滚，就是-1，而我们要信号量加1，所以减号。
+        page -= delta;
+        if (page < 0 || page > 3) {
+            page = 0;
+        }
+        console.log(page);
+        if (old != page) {
+            chuchangdonghua[old]();
+            ruchangdonghua[page]();
+            lock = false;
+        }
+        //小圆点
+        $("nav span").eq(page).addClass('cur').siblings('').removeClass('cur');
+    });
+    // 出场动画的数组、入场动画的数组
+    var chuchangdonghua = [];
+    var ruchangdonghua = [];
+    //入场动画！
+    ruchangdonghua[0] = function() {
+        //这就是0号元素的入场
+        $("h1 div").velocity({
+            "rotateX": 60,
+            "rotateZ": 720,
+            "translateZ": 400
+        }, 0);
+        $("h1 div").show().delay(600).velocity("reverse", {
+            "duration": 1000
+        });
+        $(".logo img").velocity({
+            "translateZ": 400,
+            "rotateX": 680
+        }, 0);
+        $(".logo img").show().delay(1300).velocity({
+            "translateZ": 0,
+            "rotateX": 0
+        }, 1500, function() {
+            lock = true;
+        });
+    }
+    ruchangdonghua[1] = function() {
+        $(".tip2").velocity({
+            "translateZ": 300
+        }, 0);
+        $(".tip2").show().velocity({
+            "translateZ": 0
+        }, 600);
+        $(".unit").velocity({
+            "rotateX": 180,
+            "rotateY": -10,
+            "translateZ": 300,
+            "opacity": 0
+        }, 0);
+        $(".unit").delay(600).show().velocity({
+            "rotateX": 0,
+            "translateZ": -300,
+            "opacity": 1
+        }, 400);
+        $(".unit").delay(400).velocity({
+            "rotateX": 0,
+            "rotateY": 30,
+            "translateZ": 400
+        }, 600);
+        $(".pic2 img").velocity({
+            "scale": 0.01,
+            "opacity": 0,
+            "translateZ": 0
+        }, 0);
+        $(".pic2 img").show().delay(1600).velocity({
+            "scale": 1,
+            "opacity": 1
+        }, 1000, function() {
+            lock = true;
+        });
+    }
+    ruchangdonghua[2] = function() {
+        $(".page2-pic img").velocity({
+            "translateZ": 400,
+            "rotateX": 120
+        }, 0);
+        $(".page2-pic img").show().delay(1200).velocity({
+            "translateZ": 0,
+            "rotateX": 20
+        }, 1200, function() {
+            lock = true;
+        });
+    }
+    ruchangdonghua[3] = function() {
+            $(".page3-pic img").velocity({
+                "translateZ": 300,
+                "scale": 0.1
+            }, 0);
+            $(".page3-pic img").show().delay(1300).velocity({
+                "translateZ": 0,
+                "scale": 1.2
+            }, 1200, function() {
+                lock = true;
+            });
+        }
+        // 出场动画！
+    chuchangdonghua[0] = function() {
+        $("h1 div").fadeOut();
+        $(".logo img").velocity({
+            "translateZ": 300
+        }, 600);
+    }
+    chuchangdonghua[1] = function() {
+        $(".pic2 img").delay(300).velocity({
+            "translateZ": 300
+        }, 1000);
+    }
+    chuchangdonghua[2] = function() {
+        $(".page2-pic img").delay(300).velocity({
+            "rotateX": 0,
+            "translateZ": 400
+        }, 1200);
+    }
+    chuchangdonghua[3] = function() {
+            $(".page3-pic img").delay(500).velocity({
+                "scale": 0
+            }, 1000);
+        } //程序一开始，就要调用0号入场动画ruchangdonghua[0]();
+    </script>
+</body>
+
+</html>
